@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>iamwent</title>
+  <subtitle>Lazy</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://blog.iamwent.cn/"/>
+  <updated>2016-12-18T01:45:12.000Z</updated>
+  <id>http://blog.iamwent.cn/</id>
+  
+  <author>
+    <name>iamwent</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>2016</title>
+    <link href="http://blog.iamwent.cn/2016/12/18/2016/"/>
+    <id>http://blog.iamwent.cn/2016/12/18/2016/</id>
+    <published>2016-12-18T01:45:12.000Z</published>
+    <updated>2016-12-18T01:45:12.000Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+  </entry>
+  
+</feed>
