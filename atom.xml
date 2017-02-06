@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.iamwent.cn/"/>
-  <updated>2017-02-06T04:03:17.000Z</updated>
+  <updated>2017-02-06T04:26:30.000Z</updated>
   <id>http://blog.iamwent.cn/</id>
   
   <author>
@@ -14,6 +14,142 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Android 沉浸栏实践——踩坑</title>
+    <link href="http://blog.iamwent.cn/2016/08/27/android-status-bar-tinter/"/>
+    <id>http://blog.iamwent.cn/2016/08/27/android-status-bar-tinter/</id>
+    <published>2016-08-26T16:54:04.000Z</published>
+    <updated>2017-02-06T04:26:30.000Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote>
+<p>当前开发环境：Android Studio 2.1.3，compileSdkVersion 24，buildToolsVersion “24.0.2”，support:appcompat-v7:24.2.0</p>
+</blockquote>
+<p>首先放个图，这就是我要做成的效果，Toolbar 和 Status Bar 一体共用背景图，实际上就是 Toolbar 的背景图延伸到 Status Bar。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/42817-54839f916d2b44e5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="效果图"></p>
+<a id="more"></a>
+<p>先做一点点思考。我不打算修改 toolbar 的高度，设置为 <code>android:layout_height=&quot;?attr/actionBarSize&quot;</code> 就好，否则 <code>fitsSystemWindows</code> 之后就需要设置 toolbar 高度为 25dp ＋ 48dp ＝ 73dp，同时其他的内容也会改变。那么，可以考虑在 <code>AppBarLayout</code> 中设置背景，然后让它侵入到状态栏去。现在 <code>style.xml</code> 看起来会是这样：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- values/style.xml ---&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">resources</span>&gt;</span></div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">style</span> <span class="attr">name</span>=<span class="string">"AppTheme"</span> <span class="attr">parent</span>=<span class="string">"@style/BaseAppTheme"</span>/&gt;</span><span class="xml"></span></div><div class="line"></div><div class="line">    <span class="comment">&lt;!-- Base application theme. --&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">style</span> <span class="attr">name</span>=<span class="string">"BaseAppTheme"</span> <span class="attr">parent</span>=<span class="string">"Theme.AppCompat.Light.DarkActionBar"</span>&gt;</span><span class="xml"></span></div><div class="line">        <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"colorPrimary"</span>&gt;</span>@color/colorPrimary<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"colorPrimaryDark"</span>&gt;</span>@color/colorPrimaryDark<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"colorAccent"</span>&gt;</span>@color/colorAccent<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">style</span>&gt;</span></div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">style</span> <span class="attr">name</span>=<span class="string">"AppTheme.NoActionBar"</span>&gt;</span><span class="xml"></span></div><div class="line">        <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"windowActionBar"</span>&gt;</span>false<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"windowNoTitle"</span>&gt;</span>true<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">style</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;/<span class="name">resources</span>&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!-- values-v19/style.xml ---&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">resources</span>&gt;</span></div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">style</span> <span class="attr">name</span>=<span class="string">"AppTheme"</span> <span class="attr">parent</span>=<span class="string">"@style/BaseAppTheme"</span>&gt;</span><span class="xml"></span></div><div class="line">        <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:windowTranslucentStatus"</span>&gt;</span>true<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">style</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;/<span class="name">resources</span>&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!-- values-v21/style.xml ---&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">resources</span>&gt;</span></div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">style</span> <span class="attr">name</span>=<span class="string">"AppTheme"</span> <span class="attr">parent</span>=<span class="string">"@style/BaseAppTheme"</span>&gt;</span><span class="xml"></span></div><div class="line">        <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:windowTranslucentStatus"</span>&gt;</span>false<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:windowDrawsSystemBarBackgrounds"</span>&gt;</span>true<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:statusBarColor"</span>&gt;</span>@android:color/transparent<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">style</span>&gt;</span></div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">style</span> <span class="attr">name</span>=<span class="string">"AppTheme.NoActionBar"</span>&gt;</span><span class="xml"></span></div><div class="line">        <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"windowActionBar"</span>&gt;</span>false<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"windowNoTitle"</span>&gt;</span>true<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line"></div><div class="line">    <span class="tag">&lt;/<span class="name">style</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">resources</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>toolbar 的布局文件差不多是这样子：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- layout/toolbar.xml ---&gt;</span></div><div class="line">&lt;?xml version="1.0" encoding="utf-8"?&gt;</div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">android.support.design.widget.AppBarLayout</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></span></div><div class="line">    <span class="attr">xmlns:app</span>=<span class="string">"http://schemas.android.com/apk/res-auto"</span></div><div class="line">    <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></div><div class="line">    <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span></div><div class="line">    <span class="attr">android:fitsSystemWindows</span>=<span class="string">"true"</span></div><div class="line">    <span class="attr">android:paddingTop</span>=<span class="string">"@dimen/appbar_top_padding"</span></div><div class="line">    <span class="attr">android:background</span>=<span class="string">"@drawable/bg_bar"</span></div><div class="line">    <span class="attr">android:theme</span>=<span class="string">"@style/AppTheme.AppBarOverlay"</span>&gt;</div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">android.support.v7.widget.Toolbar</span></span></div><div class="line">        <span class="attr">android:id</span>=<span class="string">"@+id/toolbar"</span></div><div class="line">        <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></div><div class="line">        <span class="attr">android:layout_height</span>=<span class="string">"?attr/actionBarSize"</span></div><div class="line">        <span class="attr">app:popupTheme</span>=<span class="string">"@style/AppTheme.PopupOverlay"</span> /&gt;</div><div class="line"></div><div class="line"><span class="tag">&lt;/<span class="name">android.support.design.widget.AppBarLayout</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>主布局文件差不多是这样子：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- layout/activity_main.xml ---&gt;</span></div><div class="line">&lt;?xml version="1.0" encoding="utf-8"?&gt;</div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">android.support.design.widget.CoordinatorLayout</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></span></div><div class="line">    <span class="attr">xmlns:app</span>=<span class="string">"http://schemas.android.com/apk/res-auto"</span></div><div class="line">    <span class="attr">xmlns:tools</span>=<span class="string">"http://schemas.android.com/tools"</span></div><div class="line">    <span class="attr">android:id</span>=<span class="string">"@+id/root"</span></div><div class="line">    <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></div><div class="line">    <span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span></div><div class="line">    <span class="attr">android:fitsSystemWindows</span>=<span class="string">"true"</span></div><div class="line">    <span class="attr">tools:context</span>=<span class="string">"com.iamwent.tinter.MainActivity"</span>&gt;</div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">include</span> <span class="attr">layout</span>=<span class="string">"@layout/toolbar"</span> /&gt;</span></div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">RelativeLayout</span></span></div><div class="line">        <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></div><div class="line">        <span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span></div><div class="line">        <span class="attr">app:layout_behavior</span>=<span class="string">"@string/appbar_scrolling_view_behavior"</span> &gt;</div><div class="line"></div><div class="line">        <span class="tag">&lt;<span class="name">TextView</span></span></div><div class="line">            <span class="attr">android:id</span>=<span class="string">"@+id/tv_sdk"</span></div><div class="line">            <span class="attr">android:layout_width</span>=<span class="string">"wrap_content"</span></div><div class="line">            <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span></div><div class="line">            <span class="attr">android:padding</span>=<span class="string">"16dp"</span>/&gt;</div><div class="line">    <span class="tag">&lt;/<span class="name">RelativeLayout</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;/<span class="name">android.support.design.widget.CoordinatorLayout</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>然后你运行，发现 v21 的效果出来了，但是 v19 是这么个鬼！<br><img src="http://upload-images.jianshu.io/upload_images/42817-8efa0310ea90f391.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="v19效果"></p>
+<p>那个灰色条是什么？又是怎么来的呢？给跟布局设置背景色就可以发现，灰色条实际上是因为根布局侵入了状态栏，从我们给根布局设置的 <code>android:fitsSystemWindows=&quot;true&quot;</code> 就是让布局上去</p>
+<p>对于 <code>android:windowTranslucentStatus</code><a href="https://developer.android.com/about/versions/android-4.4.html#UI" target="_blank" rel="external">文档上是这么说的：</a></p>
+<blockquote>
+<p>By enabling translucent system bars, your layout will fill the area behind the system bars, so you must also enable <a href="https://developer.android.com/reference/android/R.attr.html#fitsSystemWindows" target="_blank" rel="external">fitsSystemWindows</a><br> for the portion of your layout that should not be covered by the system bars.<br>开启透明状态栏后，你的布局会填充状态栏下面的区域，所以你应当同时设置布局 fitsSystemWindows 以防止被状态栏覆盖。</p>
+</blockquote>
+<p>而对于 <code>android:fitsSystemWindows</code> 文档又是这么说的：</p>
+<blockquote>
+<p>Boolean internal attribute to adjust view layout based on system windows such as the status bar. If true, adjusts the padding of this view to leave space for the system windows. Will only take effect if this view is in a <a href="http://stackoverflow.com/questions/25874412/what-is-a-non-embedded-activity-and-why-doesnt-androidfitssystemwindows-work-i" target="_blank" rel="external">non-embedded activity</a>.<br>配置 fitsSystemWindows 后，系统就会调整 view 的 padding 以给 system windows 留出空间。</p>
+</blockquote>
+<p>解决办法是根布局不设置 <code>android:fitsSystemWindows</code>，然后在代码中判断，在 v21 以上手动设置这一属性，代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">setTranslucentStatusBar</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> sdkInt = Build.VERSION.SDK_INT;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (sdkInt &gt;= Build.VERSION_CODES.LOLLIPOP) &#123;</div><div class="line">        setTranslucentStatusBarLollipop();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="meta">@TargetApi</span>(Build.VERSION_CODES.LOLLIPOP)</div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">setTranslucentStatusBarLollipop</span><span class="params">()</span> </span>&#123;</div><div class="line">    ((ViewGroup) getWindow().findViewById(android.R.id.content)).getChildAt(<span class="number">0</span>).setFitsSystemWindows(<span class="keyword">true</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>昨晚吐槽的时候，有位朋友提醒了我，这个值也可以用 <code>style</code> 的方式设置：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- values/style.xml ---&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">name</span>=<span class="string">"AppTheme.FitsSystemWindows"</span>&gt;</span><span class="undefined"></span></div><div class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!-- values-v21/style.xml ---&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">name</span>=<span class="string">"AppTheme.FitsSystemWindows"</span>&gt;</span><span class="xml"></span></div><div class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:fitsSystemWindows"</span>&gt;</span>true<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>我脑袋一抽，觉得以下这个方式可能也可以：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- values/style.xml ---&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">bool</span> <span class="attr">name</span>=<span class="string">"fit_system_status_bar"</span>&gt;</span>false<span class="tag">&lt;/<span class="name">bool</span>&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!-- values-v21/style.xml ---&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">bool</span> <span class="attr">name</span>=<span class="string">"fit_system_status_bar"</span>&gt;</span>true<span class="tag">&lt;/<span class="name">bool</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<h2 id="坑位零"><a href="#坑位零" class="headerlink" title="坑位零"></a>坑位零</h2><p>在上面的配置中涉及到了多个属性的设置，建议修改为不同的值，看看它们会造成什么样的效果。</p>
+<ul>
+<li><a href="https://developer.android.com/reference/android/R.attr.html#windowDrawsSystemBarBackgrounds" target="_blank" rel="external">android:windowDrawsSystemBarBackgrounds</a></li>
+<li>android:statusBarColor</li>
+<li>android:windowDrawsSystemBarBackgrounds</li>
+</ul>
+<h2 id="坑位一"><a href="#坑位一" class="headerlink" title="坑位一"></a>坑位一</h2><p><img src="http://upload-images.jianshu.io/upload_images/42817-dad2d3b4ac67bfaf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="奇怪的间隔"></p>
+<p>眼尖的人可能在最前面的效果图就看到了，那就是在 v23 上这个显示系统版本的 TextView 有一个奇怪的 margin，而且很巧合的就是 25dp！最后我发现，是由于给主布局的 RelativeLayout 设置了 <code>app:layout_behavior=&quot;@string/appbar_scrolling_view_behavior&quot;</code> 造成的。解决办法是在 v23 上给 RelativeLayout 设置 <code>android:layout_marginTop=&quot;-25dp&quot;</code>，可以在 dimens 中做。</p>
+<h2 id="坑位二"><a href="#坑位二" class="headerlink" title="坑位二"></a>坑位二</h2><p>在修改的过程中我还发现一个奇怪的问题，status bar 是个灰色的条，超级奇怪！最后对比发现是 <code>AppTheme.NoActionBar</code> 采用继承 <code>Theme.AppCompat.Light.NoActionBar</code> 的方式，解决办法是不继承 parent，采用手动配置。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/42817-5702ec362f11feee.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Theme 造成的怪现象"></p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>我是要给一个半成品的 APP 做适配，所以先单独做了一个 demo 实现想要的——后来踩到的坑证明我这个决定是多么的正确！特别是坑位三。所以一旦出现莫名其妙的错误，我就对照 demo 的配置一个个地方去排除。<br>另外，多试试各种配置的作用，明白它们影响的是什么区域，碰到问题才好修改。</p>
+<p><a href="https://github.com/iamwent/Tinter" target="_blank" rel="external">Demo 在这里</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;当前开发环境：Android Studio 2.1.3，compileSdkVersion 24，buildToolsVersion “24.0.2”，support:appcompat-v7:24.2.0&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;首先放个图，这就是我要做成的效果，Toolbar 和 Status Bar 一体共用背景图，实际上就是 Toolbar 的背景图延伸到 Status Bar。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://upload-images.jianshu.io/upload_images/42817-54839f916d2b44e5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240&quot; alt=&quot;效果图&quot;&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="android" scheme="http://blog.iamwent.cn/tags/android/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>买书如山倒，读书如抽丝</title>
+    <link href="http://blog.iamwent.cn/2016/03/15/a-lazy-man-always-buy-books/"/>
+    <id>http://blog.iamwent.cn/2016/03/15/a-lazy-man-always-buy-books/</id>
+    <published>2016-03-15T11:06:01.000Z</published>
+    <updated>2017-02-06T04:26:04.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>感谢<strong>向老师</strong>组织的新春读书活动，没有这么一群志同道合的人真的很难说坚持下来。这一个月的读书过程中我有几天读代码读文档读到整个人都很燥，一度想放弃，没想到还是坚持下来了。</p>
+<ul>
+<li>一九八四</li>
+<li>哲学家们都干了些什么</li>
+<li>阿弥陀佛么么哒</li>
+<li>大败局 Ⅰ、Ⅱ</li>
+<li>我的凉山兄弟</li>
+<li>公正</li>
+<li>技术元素</li>
+</ul>
+<a id="more"></a>
+<p><img src="https://img1.doubanio.com/mpic/s26039107.jpg" alt="一九八四"></p>
+<blockquote>
+<p>豆瓣读书：作品刻画了人类在极权主义社会的生存状态，有若一个永不褪色的警示标签，警醒世人提防这种预想中的黑暗成为现实。历经几十年，其生命力益显强大，被誉为“二十世纪影响最为深远的文学经典”之一。</p>
+</blockquote>
+<p>《一九八四》是一部很值得看的书。阅读此书时，你一定会对书中所描写的极权社会感到恐惧，仿佛你的身后就有思想警察注视着你，而那三句著名的口号则一直萦绕在你的耳畔：战争就是和平，自由就是奴役，无知就是力量。</p>
+<p>梁文道在『一千零一夜』这档节目中提及此书时，说到：我们的社交网络就是一个一九八四的社会，其他人扮演思想警察，我们将信息发布在网络上，由思想警察监控。</p>
+<p>我觉得梁文道在这里说的比较含蓄了。</p>
+<p><img src="https://img1.doubanio.com/mpic/s6507717.jpg" alt="哲学家们都干了些什么？"></p>
+<p>这本书号称是作者十余年兴趣阅读后的一次厚积薄发，我认为言过其实。这本书对西方哲学史泛泛而谈，从苏格拉底到康德到尼采，介绍了各种哲学理论却又统统否定，到最后都没有真正回答作者自己在序言中提出的两个问题：人生的意义是什么？我如何才能获得最大的幸福？差评。</p>
+<p><img src="https://img3.doubanio.com/mpic/s28259771.jpg" alt="阿弥陀佛么么哒"></p>
+<p>大冰自称这些故事与风花雪月无关，与鸡汤小清新无关，其实全都是鸡汤。为了给它一个完整的『读过』的标签，还是耐着性子看完了。</p>
+<p>唯一一点收获就是思考一个问题：如何对待朋友？</p>
+<p><img src="https://img3.doubanio.com/mpic/s6639656.jpg" alt="大败局Ⅰ"></p>
+<blockquote>
+<p>这不是一本阐述原理和发现真理的书，它仅仅是记载了一些著名的灾难，希望后来的人们能够从这些崩塌了的”帝国”废墟中寻找到重新出发的起点、勇气和免蹈覆辙的启示。</p>
+</blockquote>
+<p>我从这两本书中各获得一个思考的问题：市场规则和企业的道德，政商之道。</p>
+<p>推荐阅读《浪潮之巅》。</p>
+<p><img src="https://img3.doubanio.com/mpic/s28268526.jpg" alt="我的凉山兄弟"></p>
+<p>作者考察了四川凉山地区诺苏社群，探究诺苏人为何在时代剧变中陷入了艾滋病和毒品的泥沼中。毒品和艾滋并又对诺苏的社群结构、传统文化造成了怎样的冲击？诺苏的禁毒运动和艾滋病防治运动为何大都草草收场？读读这本书，思考我们身处的这个社会。</p>
+<p>坑爹的是，这是一本学术著作！所以读起来不是很畅快，怪我咯。</p>
+<p>推荐阅读《天空的另一半》。作者描述了亚非拉国家的性别歧视、性暴力、厌女价值观、家庭暴力、处女情结等现象，向我们展示了女性的生存困境，整个世界对此困境的态度，以及女性身上自我觉醒的力量。她们将绝望化为希望，勇敢争取生命尊严。</p>
+<p><img src="https://img1.doubanio.com/mpic/s4604609.jpg" alt="公正：该如何做是好"></p>
+<blockquote>
+<p>豆瓣上最热门的评论：公义不仅是探讨如何正确地分配事物，也是该如何正确地看待和评价事物。简言之，通往公义之路的三个条件就是：最大化福利，尊重个体自由，追求美好品德。</p>
+</blockquote>
+<p>桑德尔在这本书中讨论了三种考量公正的角度：福利，自由和德性。桑德尔深入的分析了每一种考量角度的主要理论支持及其困境，发人深省。同时这也是一门著名的公开课，网易上有。</p>
+<p><img src="https://img3.doubanio.com/mpic/s9042055.jpg" alt="技术元素"></p>
+<blockquote>
+<p>我会将我不成熟的想法、笔记、内心争论、草稿以及对其他文章的回应都写在《技术元素》中，这样我就能知道自己到底在想些什么。—— KK</p>
+<p>“技术元素”（technium)是凯文•凯利专门创造出来的词语。“技术元素不仅仅包括一些具象的技术（例如汽车、雷达和计算机等），它还包括文化、 法律、社会机构和所有的智能创造物。”简而言之，技术元素就是从人的意识中涌现出来的一切。KK 把这种科技的延伸面看成一个能产生自我动 力的整体。</p>
+</blockquote>
+<p>阅读这本书的时候，正值 AlphaGo 大战李世乭。我押李世乭，因为我觉得目前的技术还没有达到这种高度。然而 AlphaGo 打了我的脸。</p>
+<p>这本书还没看完。目前最深刻的一句话是：技术元素能够促进技术元素的发展。具体的说就是 AlphaGo 能促进 AlphaGo 的发展。</p>
+<p>技术力量是社会发展的巨大推力，但也需要法律法规来规范，文化、艺术和教育的力量来引导人们走向真善美。</p>
+<p>最后给大家推荐一部纪录片，Home，研究地球的外星人必看。<br><img src="https://img1.doubanio.com/view/movie_poster_cover/spst/public/p835650453.jpg" alt="家园/Home"></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;感谢&lt;strong&gt;向老师&lt;/strong&gt;组织的新春读书活动，没有这么一群志同道合的人真的很难说坚持下来。这一个月的读书过程中我有几天读代码读文档读到整个人都很燥，一度想放弃，没想到还是坚持下来了。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;一九八四&lt;/li&gt;
+&lt;li&gt;哲学家们都干了些什么&lt;/li&gt;
+&lt;li&gt;阿弥陀佛么么哒&lt;/li&gt;
+&lt;li&gt;大败局 Ⅰ、Ⅱ&lt;/li&gt;
+&lt;li&gt;我的凉山兄弟&lt;/li&gt;
+&lt;li&gt;公正&lt;/li&gt;
+&lt;li&gt;技术元素&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="readding" scheme="http://blog.iamwent.cn/tags/readding/"/>
+    
+  </entry>
   
   <entry>
     <title>Dagger2 Step to Step</title>
