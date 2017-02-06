@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.iamwent.cn/"/>
-  <updated>2017-02-06T03:40:23.000Z</updated>
+  <updated>2017-02-06T03:57:32.000Z</updated>
   <id>http://blog.iamwent.cn/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://blog.iamwent.cn/2015/11/26/android-studio-for-experts/"/>
     <id>http://blog.iamwent.cn/2015/11/26/android-studio-for-experts/</id>
     <published>2015-11-26T00:31:30.000Z</published>
-    <updated>2017-02-06T03:40:23.000Z</updated>
+    <updated>2017-02-06T03:57:32.000Z</updated>
     
     <content type="html"><![CDATA[<blockquote>
 <p>冒死总结！有些地方不知道怎么描述，自己动手感受一番吧。</p>
@@ -30,6 +30,7 @@
 <p>补充一点：我的测试环境是 win7 + as 1.5，有错误的地方还请指出，谢谢。</p>
 </blockquote>
 <p>昨天<a href="http://weibo.com/2491729875/D5vFEdvuC" target="_blank" rel="external">@陈启超同学</a>发了 Android Studio for Experts (Android Dev Summit 2015) 的视频，我也跟着学习了一下。这个视频讲的非常好！做点小结，分享交流。</p>
+<a id="more"></a>
 <h2 id="Completion"><a href="#Completion" class="headerlink" title="Completion"></a>Completion</h2><ol>
 <li><p>使用 Tab 补全，会自动编辑光标之后的字符串，如下，你在光标处键入 c 然后选择 <code>contentEquals</code> 然后回车，magic！<br><img src="http://upload-images.jianshu.io/upload_images/42817-7bdb7da5530aba28.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="c.png"></p>
 </li>
@@ -135,7 +136,10 @@
 &lt;p&gt;冒死总结！有些地方不知道怎么描述，自己动手感受一番吧。&lt;/p&gt;
 &lt;p&gt;&lt;del&gt;我只总结了前面五分多钟讲的快捷方式。后面的高级技巧我还在学习中，坑慢慢填。&lt;/del&gt;&lt;/p&gt;
 &lt;p&gt;已将 Tor Norbye 演讲的编辑技巧补充完。&lt;/p&gt;
-&lt;p&gt;
+&lt;p&gt;再来一波更新~duang~还有最后的 NDK 调试和 CPU 优化调试没总结，有空再说，囧&lt;/p&gt;
+&lt;p&gt;补充一点：我的测试环境是 win7 + as 1.5，有错误的地方还请指出，谢谢。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;昨天&lt;a href=&quot;http://weibo.com/2491729875/D5vFEdvuC&quot;&gt;@陈启超同学&lt;/a&gt;发了 Android Studio for Experts (Android Dev Summit 2015) 的视频，我也跟着学习了一下。这个视频讲的非常好！做点小结，分享交流。&lt;/p&gt;
     
     </summary>
     
@@ -149,7 +153,7 @@
     <link href="http://blog.iamwent.cn/2015/11/25/android-studio-templates/"/>
     <id>http://blog.iamwent.cn/2015/11/25/android-studio-templates/</id>
     <published>2015-11-25T13:19:30.000Z</published>
-    <updated>2017-02-06T03:33:36.000Z</updated>
+    <updated>2017-02-06T03:57:18.000Z</updated>
     
     <content type="html"><![CDATA[<blockquote>
 <p><strong>对模板工程的改造有可能造成 Android Studio 更新失败！</strong></p>
@@ -158,6 +162,7 @@
 </blockquote>
 <h2 id="添加自定义-Templates"><a href="#添加自定义-Templates" class="headerlink" title="添加自定义 Templates"></a>添加自定义 Templates</h2><p>自定义的位置入口在这儿：</p>
 <p><img src="http://upload-images.jianshu.io/upload_images/42817-16f180a2841bae45.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="edit.png"></p>
+<a id="more"></a>
 <p>然后，选择 Templates 按 + 就可以一步步操作啦。</p>
 <p><img src="http://upload-images.jianshu.io/upload_images/42817-2d11d4bc9c7ce8ac.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="templates.png"></p>
 <p>Description 处有些很有用的说明，这里指出了多个占位符号，可以在根据模板类生成具体的类时替换成合适的字符。</p>
@@ -213,7 +218,10 @@
       &lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;对模板工程的改造有可能造成 Android Studio 更新失败！&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;最近我从 1.5 -&amp;gt; 1.5.1 更新失败，就是对模板工程的改造造成了冲突！&lt;/p&gt;
-&lt;p&gt;中午 @drakeet 秀了一
+&lt;p&gt;中午 @drakeet 秀了一波他改造的两个小模板，另外还发了几张官方自带模板的本地位置图片，我也跟着改造了一把。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;添加自定义-Templates&quot;&gt;&lt;a href=&quot;#添加自定义-Templates&quot; class=&quot;headerlink&quot; title=&quot;添加自定义 Templates&quot;&gt;&lt;/a&gt;添加自定义 Templates&lt;/h2&gt;&lt;p&gt;自定义的位置入口在这儿：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://upload-images.jianshu.io/upload_images/42817-16f180a2841bae45.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240&quot; alt=&quot;edit.png&quot;&gt;&lt;/p&gt;
     
     </summary>
     
