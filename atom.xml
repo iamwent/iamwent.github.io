@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.iamwent.cn/"/>
-  <updated>2017-02-06T04:02:27.000Z</updated>
+  <updated>2017-02-06T04:03:17.000Z</updated>
   <id>http://blog.iamwent.cn/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://blog.iamwent.cn/2016/03/09/dagger2-step-to-step/"/>
     <id>http://blog.iamwent.cn/2016/03/09/dagger2-step-to-step/</id>
     <published>2016-03-09T10:07:13.000Z</published>
-    <updated>2017-02-06T04:02:27.000Z</updated>
+    <updated>2017-02-06T04:03:17.000Z</updated>
     
     <content type="html"><![CDATA[<blockquote>
 <p>假设你已经了解 <a href="http://www.devtf.cn/?p=1248" target="_blank" rel="external"><strong>依赖注入</strong></a> 这一概念，只是在如何使用 Dagger 时遇到了一些困扰，因为 Dagger 其实是一个上手难度颇高的库。我试图通过这篇文章解决如何上手这一问题。</p>
@@ -28,6 +28,7 @@
 <p>目前 Dagger 有两个分支，一个由 <a href="https://github.com/square/dagger" target="_blank" rel="external">Square</a> 维护，一个为 Google 在前者的基础上开出的分支，即 <a href="https://github.com/google/dagger" target="_blank" rel="external">Dagger 2</a> 。关于二者的比较，<a href="http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2015/0519/2892.html" target="_blank" rel="external">点击此处</a> 。</p>
 <p>本文写作过程中参考了不少优秀的 Dagger 文章，列在文章末尾。</p>
 <p><strong>在此一并感谢他们的工作！</strong></p>
+<a id="more"></a>
 <h2 id="Dagger"><a href="#Dagger" class="headerlink" title="Dagger"></a>Dagger</h2><p>在引入 Dagger 之前，我们需要了解一些基础概念。Dagger 主要分三块：</p>
 <ul>
 <li><strong>@Inject</strong>：需要注入依赖的地方，Dagger 会构造一个该类的实例并满足它所需要的依赖；</li>
@@ -98,7 +99,11 @@
     <summary type="html">
     
       &lt;blockquote&gt;
-&lt;p&gt;假设你已经了解 &lt;a href=&quot;http://www.devtf.cn/?p=1248&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;&lt;strong&gt;依赖注入&lt;/strong&gt;&lt;/a&gt; 这一概念，只是在如何使用 Dagger 时
+&lt;p&gt;假设你已经了解 &lt;a href=&quot;http://www.devtf.cn/?p=1248&quot;&gt;&lt;strong&gt;依赖注入&lt;/strong&gt;&lt;/a&gt; 这一概念，只是在如何使用 Dagger 时遇到了一些困扰，因为 Dagger 其实是一个上手难度颇高的库。我试图通过这篇文章解决如何上手这一问题。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;目前 Dagger 有两个分支，一个由 &lt;a href=&quot;https://github.com/square/dagger&quot;&gt;Square&lt;/a&gt; 维护，一个为 Google 在前者的基础上开出的分支，即 &lt;a href=&quot;https://github.com/google/dagger&quot;&gt;Dagger 2&lt;/a&gt; 。关于二者的比较，&lt;a href=&quot;http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2015/0519/2892.html&quot;&gt;点击此处&lt;/a&gt; 。&lt;/p&gt;
+&lt;p&gt;本文写作过程中参考了不少优秀的 Dagger 文章，列在文章末尾。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;在此一并感谢他们的工作！&lt;/strong&gt;&lt;/p&gt;
     
     </summary>
     
