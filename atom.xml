@@ -78,6 +78,41 @@
   </entry>
   
   <entry>
+    <title>React Native Tutorial</title>
+    <link href="http://blog.iamwent.cn/2017/02/12/react-native-tutorial/"/>
+    <id>http://blog.iamwent.cn/2017/02/12/react-native-tutorial/</id>
+    <published>2017-02-12T05:24:41.000Z</published>
+    <updated>2017-02-12T06:26:20.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>花了一点点时间学习了 JavaScript，入坑 React Native。</p>
+<h2 id="JavaScript"><a href="#JavaScript" class="headerlink" title="JavaScript"></a>JavaScript</h2><p>有两个非常好的教程：</p>
+<ul>
+<li><a href="http://www.liaoxuefeng.com/wiki/001434446689867b27157e896e74d51a89c25cc8b43bdb3000" target="_blank" rel="external">廖雪峰老师的 JavaScript 教程</a></li>
+<li><a href="http://es6.ruanyifeng.com/" target="_blank" rel="external">阮一峰老师的 ECMAScript 6 入门</a></li>
+</ul>
+<h2 id="React-Native"><a href="#React-Native" class="headerlink" title="React Native"></a>React Native</h2><ul>
+<li>按照官网搭建开发环境</li>
+<li>使用 WebStorm 开发</li>
+</ul>
+<h2 id="扩展阅读"><a href="#扩展阅读" class="headerlink" title="扩展阅读"></a>扩展阅读</h2><ul>
+<li><a href="https://f8-app.liaohuqiu.net/" target="_blank" rel="external">构建 F8 App / React Native 开发指南</a></li>
+<li><a href="https://github.com/vczero/react-native-lesson" target="_blank" rel="external">React Native 入门指南</a></li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;花了一点点时间学习了 JavaScript，入坑 React Native。&lt;/p&gt;
+&lt;h2 id=&quot;JavaScript&quot;&gt;&lt;a href=&quot;#JavaScript&quot; class=&quot;headerlink&quot; title=&quot;JavaScript&quot;&gt;&lt;/a&gt;JavaScript
+    
+    </summary>
+    
+    
+      <category term="react native" scheme="http://blog.iamwent.cn/tags/react-native/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Android 沉浸栏实践——踩坑</title>
     <link href="http://blog.iamwent.cn/2016/08/27/android-status-bar-tinter/"/>
     <id>http://blog.iamwent.cn/2016/08/27/android-status-bar-tinter/</id>
