@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.iamwent.cn/"/>
-  <updated>2017-02-10T08:40:38.000Z</updated>
+  <updated>2017-02-12T06:34:34.000Z</updated>
   <id>http://blog.iamwent.cn/</id>
   
   <author>
@@ -20,11 +20,70 @@
     <link href="http://blog.iamwent.cn/2017/12/30/plan-a-of-2017/"/>
     <id>http://blog.iamwent.cn/2017/12/30/plan-a-of-2017/</id>
     <published>2017-12-30T13:22:28.000Z</published>
-    <updated>2017-02-10T08:40:38.000Z</updated>
+    <updated>2017-02-12T06:34:34.000Z</updated>
     
-    <content type="html"><![CDATA[<p>我不是一个爱记笔记的人，也不是一个爱总结的人。这两天吃了亏，决定对自己的知识进行总结整理，查漏补缺。</p>
+    <content type="html"><![CDATA[<p>我不是一个爱记笔记的人，也不是一个爱总结的人。这两天吃了亏，决定对自己的知识进行总结整理，查漏补缺。把这些内容都写到 <a href="http://blog.iamwent.cn/2017/02/12/android-tips/">Android Tips</a> 一文中去吧。同时把一些常用的代码抽离出来放到 GitHub 上去。</p>
+<p>另外在大前端的趋势下，入坑学习 React Native，放到 <a href="http://blog.iamwent.cn/2017/02/12/react-native-tutorial/">React Native Tutorial</a> 一文中去。</p>
+<p>最后，我虽然去年大略学习了 iOS 开发，但是是基于 Swift 的，这部分内容放到最后再来深入学习吧。</p>
 <a id="more"></a>
-<p>对此，我先稍微分下类：</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;我不是一个爱记笔记的人，也不是一个爱总结的人。这两天吃了亏，决定对自己的知识进行总结整理，查漏补缺。把这些内容都写到 &lt;a href=&quot;http://blog.iamwent.cn/2017/02/12/android-tips/&quot;&gt;Android Tips&lt;/a&gt; 一文中去吧。同时把一些常用的代码抽离出来放到 GitHub 上去。&lt;/p&gt;
+&lt;p&gt;另外在大前端的趋势下，入坑学习 React Native，放到 &lt;a href=&quot;http://blog.iamwent.cn/2017/02/12/react-native-tutorial/&quot;&gt;React Native Tutorial&lt;/a&gt; 一文中去。&lt;/p&gt;
+&lt;p&gt;最后，我虽然去年大略学习了 iOS 开发，但是是基于 Swift 的，这部分内容放到最后再来深入学习吧。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="android" scheme="http://blog.iamwent.cn/tags/android/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>React Native Tutorial</title>
+    <link href="http://blog.iamwent.cn/2017/02/12/react-native-tutorial/"/>
+    <id>http://blog.iamwent.cn/2017/02/12/react-native-tutorial/</id>
+    <published>2017-02-12T05:24:41.000Z</published>
+    <updated>2017-02-12T06:26:20.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>花了一点点时间学习了 JavaScript，入坑 React Native。</p>
+<h2 id="JavaScript"><a href="#JavaScript" class="headerlink" title="JavaScript"></a>JavaScript</h2><p>有两个非常好的教程：</p>
+<ul>
+<li><a href="http://www.liaoxuefeng.com/wiki/001434446689867b27157e896e74d51a89c25cc8b43bdb3000" target="_blank" rel="external">廖雪峰老师的 JavaScript 教程</a></li>
+<li><a href="http://es6.ruanyifeng.com/" target="_blank" rel="external">阮一峰老师的 ECMAScript 6 入门</a></li>
+</ul>
+<h2 id="React-Native"><a href="#React-Native" class="headerlink" title="React Native"></a>React Native</h2><ul>
+<li>按照官网搭建开发环境</li>
+<li>使用 WebStorm 开发</li>
+</ul>
+<h2 id="扩展阅读"><a href="#扩展阅读" class="headerlink" title="扩展阅读"></a>扩展阅读</h2><ul>
+<li><a href="https://f8-app.liaohuqiu.net/" target="_blank" rel="external">构建 F8 App / React Native 开发指南</a></li>
+<li><a href="https://github.com/vczero/react-native-lesson" target="_blank" rel="external">React Native 入门指南</a></li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;花了一点点时间学习了 JavaScript，入坑 React Native。&lt;/p&gt;
+&lt;h2 id=&quot;JavaScript&quot;&gt;&lt;a href=&quot;#JavaScript&quot; class=&quot;headerlink&quot; title=&quot;JavaScript&quot;&gt;&lt;/a&gt;JavaScript
+    
+    </summary>
+    
+    
+      <category term="react native" scheme="http://blog.iamwent.cn/tags/react-native/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Android Tips</title>
+    <link href="http://blog.iamwent.cn/2017/02/11/android-tips/"/>
+    <id>http://blog.iamwent.cn/2017/02/11/android-tips/</id>
+    <published>2017-02-11T06:28:01.000Z</published>
+    <updated>2017-02-12T06:30:38.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>对此，我先稍微分下类：</p>
 <h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><ul>
 <li>四大组件技巧</li>
 <li>常用组件技巧</li>
@@ -68,47 +127,15 @@
     
     <summary type="html">
     
-      &lt;p&gt;我不是一个爱记笔记的人，也不是一个爱总结的人。这两天吃了亏，决定对自己的知识进行总结整理，查漏补缺。&lt;/p&gt;
+      &lt;p&gt;对此，我先稍微分下类：&lt;/p&gt;
+&lt;h2 id=&quot;基础&quot;&gt;&lt;a href=&quot;#基础&quot; class=&quot;headerlink&quot; title=&quot;基础&quot;&gt;&lt;/a&gt;基础&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;四大组件技巧&lt;/li&gt;
+&lt;li&gt;常用组件技巧&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;UI&quot;
     
     </summary>
     
-    
-      <category term="android" scheme="http://blog.iamwent.cn/tags/android/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>React Native Tutorial</title>
-    <link href="http://blog.iamwent.cn/2017/02/12/react-native-tutorial/"/>
-    <id>http://blog.iamwent.cn/2017/02/12/react-native-tutorial/</id>
-    <published>2017-02-12T05:24:41.000Z</published>
-    <updated>2017-02-12T06:26:20.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>花了一点点时间学习了 JavaScript，入坑 React Native。</p>
-<h2 id="JavaScript"><a href="#JavaScript" class="headerlink" title="JavaScript"></a>JavaScript</h2><p>有两个非常好的教程：</p>
-<ul>
-<li><a href="http://www.liaoxuefeng.com/wiki/001434446689867b27157e896e74d51a89c25cc8b43bdb3000" target="_blank" rel="external">廖雪峰老师的 JavaScript 教程</a></li>
-<li><a href="http://es6.ruanyifeng.com/" target="_blank" rel="external">阮一峰老师的 ECMAScript 6 入门</a></li>
-</ul>
-<h2 id="React-Native"><a href="#React-Native" class="headerlink" title="React Native"></a>React Native</h2><ul>
-<li>按照官网搭建开发环境</li>
-<li>使用 WebStorm 开发</li>
-</ul>
-<h2 id="扩展阅读"><a href="#扩展阅读" class="headerlink" title="扩展阅读"></a>扩展阅读</h2><ul>
-<li><a href="https://f8-app.liaohuqiu.net/" target="_blank" rel="external">构建 F8 App / React Native 开发指南</a></li>
-<li><a href="https://github.com/vczero/react-native-lesson" target="_blank" rel="external">React Native 入门指南</a></li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;花了一点点时间学习了 JavaScript，入坑 React Native。&lt;/p&gt;
-&lt;h2 id=&quot;JavaScript&quot;&gt;&lt;a href=&quot;#JavaScript&quot; class=&quot;headerlink&quot; title=&quot;JavaScript&quot;&gt;&lt;/a&gt;JavaScript
-    
-    </summary>
-    
-    
-      <category term="react native" scheme="http://blog.iamwent.cn/tags/react-native/"/>
     
   </entry>
   

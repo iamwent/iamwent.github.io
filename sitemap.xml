@@ -2,16 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://blog.iamwent.cn/2017/02/12/react-native-tutorial/</loc>
+    <loc>http://blog.iamwent.cn/2017/12/30/plan-a-of-2017/</loc>
     
-    <lastmod>2017-02-12T06:26:20.000Z</lastmod>
+    <lastmod>2017-02-12T06:34:34.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://blog.iamwent.cn/2017/12/30/plan-a-of-2017/</loc>
+    <loc>http://blog.iamwent.cn/2017/02/11/android-tips/</loc>
     
-    <lastmod>2017-02-10T08:40:38.000Z</lastmod>
+    <lastmod>2017-02-12T06:30:38.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.iamwent.cn/2017/02/12/react-native-tutorial/</loc>
+    
+    <lastmod>2017-02-12T06:26:20.000Z</lastmod>
     
   </url>
   
