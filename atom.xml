@@ -43,10 +43,10 @@
   
   <entry>
     <title>Android using JavaScript in WebView</title>
-    <link href="http://blog.iamwent.cn/2017/02/21/android-using-javascript-in-webview/"/>
-    <id>http://blog.iamwent.cn/2017/02/21/android-using-javascript-in-webview/</id>
+    <link href="http://blog.iamwent.cn/2017/02/21/android-using-javascript-in-webView/"/>
+    <id>http://blog.iamwent.cn/2017/02/21/android-using-javascript-in-webView/</id>
     <published>2017-02-21T10:58:29.000Z</published>
-    <updated>2017-02-21T13:17:19.000Z</updated>
+    <updated>2017-02-21T13:20:45.000Z</updated>
     
     <content type="html"><![CDATA[<p>在 Android 开发中，有时候需要 native 和 HTML5 页面进行交互，有两种方式：其一是给 WebView 添加 Javascript 回调接口，一种是拦截 WebView 的 url 从而达到交互的目的。</p>
 <h2 id="Enabling-JavaScript"><a href="#Enabling-JavaScript" class="headerlink" title="Enabling JavaScript"></a>Enabling JavaScript</h2><p>WebView 默认是禁用 JavaScript 的，所以要打开这项设置才能与之交互，方法如下：</p>
@@ -76,6 +76,9 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 没有返回值，需要 JavaScript 再调用 native 方法</span></div><div class="line">webView.loadUrl(<span class="string">"javascript:todo()"</span>);</div></pre></td></tr></table></figure>
 <p>在 Android 4.4 及其以上版本中， WebView 中提供了一个叫做 <code>evaluateJavascript()</code> 的方法，可以用来异步执行 JavaScript 代码，并且这个方法需要在主线程中调用。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 在主线程中调用，异步执行</span></div><div class="line">String script = <span class="string">""</span>;</div><div class="line">webView.evaluateJavascript(script, <span class="keyword">new</span> ValueCallback&lt;String&gt;() &#123;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReceiveValue</span><span class="params">(String value)</span> </span>&#123;</div><div class="line">        <span class="comment">// todo</span></div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<blockquote>
+<p>demo 就不写了，很简单的啦。</p>
+</blockquote>
 <h2 id="Reading-More"><a href="#Reading-More" class="headerlink" title="Reading More"></a>Reading More</h2><ul>
 <li><a href="https://developer.android.com/guide/webapps/webview.html" target="_blank" rel="external">Building Web Apps in WebView | Android Developers</a></li>
 <li><a href="https://mthli.github.io/Android-WebView-JavaScript" target="_blank" rel="external">Android WebView 与 JavaScript 交互</a></li>
