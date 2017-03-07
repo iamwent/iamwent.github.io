@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.iamwent.cn/"/>
-  <updated>2017-02-21T13:21:17.000Z</updated>
+  <updated>2017-03-07T02:32:20.000Z</updated>
   <id>http://blog.iamwent.cn/</id>
   
   <author>
@@ -16,19 +16,82 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Android：如何避免 ANR？</title>
+    <link href="http://blog.iamwent.cn/2017/03/06/how-to-avoid-anrs/"/>
+    <id>http://blog.iamwent.cn/2017/03/06/how-to-avoid-anrs/</id>
+    <published>2017-03-06T10:34:28.000Z</published>
+    <updated>2017-03-07T02:32:20.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>我们知道，在主线程进行耗时任务会造成 ANR（Application Not Responding），其原因可能有：</p>
+<ul>
+<li>5 秒内无法响应对输入事件(例如硬件点击或者屏幕触摸事件)</li>
+<li>BroadReceiver 不能够在 10 秒内执行完接收到的任务</li>
+<li>Service 在特定的时间内无法处理完成</li>
+</ul>
+<p>有经验的同学都知道，<strong>网络操作、数据库读写、文件读写、大量计算</strong>等等这些耗时任务都应该做成异步的。但是，出于种种意外我们还是可能会碰到 ANR。</p>
+<p>那我们用什么办法去应对呢？</p>
+<a id="more"></a>
+<h2 id="StrictMode"><a href="#StrictMode" class="headerlink" title="StrictMode"></a>StrictMode</h2><p>StrictMode，即严格模式，可以根据我们设定的策略来检测代码中不规范的地方并给出提示，log、dialog 或者直接崩溃。具体的策略分两类，TreadPolicy and VmPolicy。</p>
+<p><strong>Thread Policy：</strong></p>
+<ul>
+<li>Custom Slow Calls，耗时方法</li>
+<li>Disk Reads &amp; Writes，磁盘读写</li>
+<li>Network，网络操作</li>
+<li>Resource Mismatches，资源不匹配</li>
+</ul>
+<p><strong>VM Policy：</strong></p>
+<ul>
+<li>Activity Leaks，</li>
+<li>Class Instance Limit，类的对象数量上限</li>
+<li>Leaked Sql Lite Objects，SQL 对象泄露</li>
+<li>Leaked Closable Objects</li>
+</ul>
+<p>更多的策略及其设置方法可以在 <code>android.os.StrictMode</code> 类中查看。我在 Application.onCreate() 中调用了以下方法，需要注意的是 StrictMode 最低支持 API 9.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">toggleStrictMode</span><span class="params">(<span class="keyword">boolean</span> isDebug)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (!isDebug) &#123;</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    StrictMode.ThreadPolicy threadPolicy = <span class="keyword">new</span> StrictMode.ThreadPolicy</div><div class="line">            .Builder()</div><div class="line">            .detectAll()</div><div class="line">            .penaltyLog()</div><div class="line">            .build();</div><div class="line">    StrictMode.setThreadPolicy(threadPolicy);</div><div class="line"></div><div class="line">    StrictMode.VmPolicy vmPolicy = <span class="keyword">new</span> StrictMode.VmPolicy</div><div class="line">            .Builder()</div><div class="line">            .detectAll()</div><div class="line">            .penaltyLog()</div><div class="line">            .build();</div><div class="line">    StrictMode.setVmPolicy(vmPolicy);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="Analyzing-ANR-Trace-File"><a href="#Analyzing-ANR-Trace-File" class="headerlink" title="Analyzing ANR Trace File"></a>Analyzing ANR Trace File</h2><p>事实上，发生 ANR 后，系统中会生成一个文件：<code>/data/anr/traces.txt</code>，这个文件记录了 ANR 的一些信息，我们可以把它拿出来分析，命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">adb pull /data/anr/traces.txt ~/Downloads/traces.txt</div></pre></td></tr></table></figure>
+<p>在这个文件靠前的位置会保留最后一次发生 ANR 时被调用的方法栈，下面的 trace 信息显示了我的应用产生 ANR 的地方是调用了 <code>com.iamwent.gank.ui.daily.DailyActivity.chooseOneDay</code> 这个方法，里面使用了 <code>Thread.sleep</code>。你不妨自己手动制造一个 ANR 然后看看这个文件的内容 <code>^_^</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">&quot;main&quot; prio=5 tid=1 Sleeping</div><div class="line">  | group=&quot;main&quot; sCount=1 dsCount=0 obj=0x76cf0fb8 self=0x7fb3874a00</div><div class="line">  | sysTid=12199 nice=0 cgrp=default sched=0/0 handle=0x7fb78c4fc8</div><div class="line">  | state=S schedstat=( 0 0 0 ) utm=62 stm=20 core=7 HZ=100</div><div class="line">  | stack=0x7fc7eac000-0x7fc7eae000 stackSize=8MB</div><div class="line">  | held mutexes=</div><div class="line">  at java.lang.Thread.sleep!(Native method)</div><div class="line">  - sleeping on &lt;0x056f8f79&gt; (a java.lang.Object)</div><div class="line">  at java.lang.Thread.sleep(Thread.java:1031)</div><div class="line">  - locked &lt;0x056f8f79&gt; (a java.lang.Object)</div><div class="line">  at java.lang.Thread.sleep(Thread.java:985)</div><div class="line">  at com.iamwent.gank.ui.daily.DailyActivity.chooseOneDay(DailyActivity.java:177)</div><div class="line">  at com.iamwent.gank.ui.daily.DailyActivity.onOptionsItemSelected(DailyActivity.java:157)</div><div class="line">  at android.app.Activity.onMenuItemSelected(Activity.java:3204)</div><div class="line">  at android.support.v4.app.FragmentActivity.onMenuItemSelected(FragmentActivity.java:408)</div><div class="line">  at android.support.v7.app.AppCompatActivity.onMenuItemSelected(AppCompatActivity.java:195)</div><div class="line">  at android.support.v7.view.WindowCallbackWrapper.onMenuItemSelected(WindowCallbackWrapper.java:113)</div><div class="line">  at android.support.v7.view.WindowCallbackWrapper.onMenuItemSelected(WindowCallbackWrapper.java:113)</div><div class="line">  at android.support.v7.app.ToolbarActionBar$2.onMenuItemClick(ToolbarActionBar.java:69)</div></pre></td></tr></table></figure>
+<h2 id="More"><a href="#More" class="headerlink" title="More"></a>More</h2><p>还有一点，我们可以在开发者选项中打开 <strong>显示全部 ANR</strong>，可以显示所有后台应用 ANR 的对话框。不同的手机改选项的位置和名称可能略有不同。</p>
+<p>我们避免 ANR 某种程度上也是为了提高应用的流畅度。在官方文档中提及，用户能够察觉到卡顿的上限一般是 100ms - 200ms，这也就是说，我们对 UI 的响应时间不要超过这个范围，这也就要求我们的方法（在主线程）的执行时间不要超过这个间隔，这个就是我们要研究的另一个问题了。</p>
+<h2 id="Reading"><a href="#Reading" class="headerlink" title="Reading"></a>Reading</h2><ul>
+<li><a href="https://developer.android.com/training/articles/perf-anr.html" target="_blank" rel="external">Keeping Your App Responsive | Android Developers</a></li>
+<li><a href="https://developer.android.com/reference/android/os/StrictMode.html" target="_blank" rel="external">StrictMode | Android Developers</a></li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;我们知道，在主线程进行耗时任务会造成 ANR（Application Not Responding），其原因可能有：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;5 秒内无法响应对输入事件(例如硬件点击或者屏幕触摸事件)&lt;/li&gt;
+&lt;li&gt;BroadReceiver 不能够在 10 秒内执行完接收到的任务&lt;/li&gt;
+&lt;li&gt;Service 在特定的时间内无法处理完成&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;有经验的同学都知道，&lt;strong&gt;网络操作、数据库读写、文件读写、大量计算&lt;/strong&gt;等等这些耗时任务都应该做成异步的。但是，出于种种意外我们还是可能会碰到 ANR。&lt;/p&gt;
+&lt;p&gt;那我们用什么办法去应对呢？&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="android, anr" scheme="http://blog.iamwent.cn/tags/android-anr/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Android using JavaScript in WebView</title>
     <link href="http://blog.iamwent.cn/2017/02/21/android-using-javascript-in-webview/"/>
     <id>http://blog.iamwent.cn/2017/02/21/android-using-javascript-in-webview/</id>
     <published>2017-02-21T10:58:29.000Z</published>
-    <updated>2017-02-21T13:21:17.000Z</updated>
+    <updated>2017-03-07T02:31:20.000Z</updated>
     
     <content type="html"><![CDATA[<p>在 Android 开发中，有时候需要 native 和 HTML5 页面进行交互，有两种方式：其一是给 WebView 添加 Javascript 回调接口，一种是拦截 WebView 的 url 从而达到交互的目的。</p>
 <h2 id="Enabling-JavaScript"><a href="#Enabling-JavaScript" class="headerlink" title="Enabling JavaScript"></a>Enabling JavaScript</h2><p>WebView 默认是禁用 JavaScript 的，所以要打开这项设置才能与之交互，方法如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">webView.getSettings().setJavaScriptEnabled(<span class="keyword">true</span>);</div></pre></td></tr></table></figure>
-<a id="more"></a>
 <h2 id="Javascript-invoke-Java"><a href="#Javascript-invoke-Java" class="headerlink" title="Javascript invoke Java"></a>Javascript invoke Java</h2><p>假设我们现在要实现一个小功能：JavaScript 调用本地代码关掉当前 Activity，怎么做呢？</p>
 <p>WebView 设置 JavaScript 接口使用的是方法：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">webView.addJavascriptInterface(Object object, String name)</div></pre></td></tr></table></figure>
+<a id="more"></a>
 <p>第一个参数就是接口类，第二个参数是将这个接口对象插入到 JavaScript 上下文中时对应的名字，JavaScript 就是通过这个名字来调用接口中的方法的。</p>
 <p>首先我们来定义这个接口类：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> android.app.Activity;</div><div class="line"><span class="keyword">import</span> android.webkit.JavascriptInterface;</div><div class="line"></div><div class="line"><span class="keyword">import</span> java.lang.ref.WeakReference;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Created by iamwent on 21/02/2017.</div><div class="line"> *</div><div class="line"> * <span class="doctag">@author</span> iamwent</div><div class="line"> * <span class="doctag">@since</span> 21/02/2017</div><div class="line"> */</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JSCallback</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="comment">// avoid memory leak</span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> WeakReference&lt;Activity&gt; weak;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">JSCallback</span><span class="params">(Activity activity)</span> </span>&#123;</div><div class="line">        weak = <span class="keyword">new</span> WeakReference&lt;&gt;(activity);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@JavascriptInterface</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">finish</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (!weak.get().isDestroyed()) &#123;</div><div class="line">            weak.get().finish();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -65,6 +128,9 @@
       &lt;p&gt;在 Android 开发中，有时候需要 native 和 HTML5 页面进行交互，有两种方式：其一是给 WebView 添加 Javascript 回调接口，一种是拦截 WebView 的 url 从而达到交互的目的。&lt;/p&gt;
 &lt;h2 id=&quot;Enabling-JavaScript&quot;&gt;&lt;a href=&quot;#Enabling-JavaScript&quot; class=&quot;headerlink&quot; title=&quot;Enabling JavaScript&quot;&gt;&lt;/a&gt;Enabling JavaScript&lt;/h2&gt;&lt;p&gt;WebView 默认是禁用 JavaScript 的，所以要打开这项设置才能与之交互，方法如下：&lt;/p&gt;
 &lt;figure class=&quot;highlight java&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;webView.getSettings().setJavaScriptEnabled(&lt;span class=&quot;keyword&quot;&gt;true&lt;/span&gt;);&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h2 id=&quot;Javascript-invoke-Java&quot;&gt;&lt;a href=&quot;#Javascript-invoke-Java&quot; class=&quot;headerlink&quot; title=&quot;Javascript invoke Java&quot;&gt;&lt;/a&gt;Javascript invoke Java&lt;/h2&gt;&lt;p&gt;假设我们现在要实现一个小功能：JavaScript 调用本地代码关掉当前 Activity，怎么做呢？&lt;/p&gt;
+&lt;p&gt;WebView 设置 JavaScript 接口使用的是方法：&lt;/p&gt;
+&lt;figure class=&quot;highlight java&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;webView.addJavascriptInterface(Object object, String name)&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
     
     </summary>
     

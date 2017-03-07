@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.iamwent.cn/2017/03/06/how-to-avoid-anrs/</loc>
+    
+    <lastmod>2017-03-07T02:32:20.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.iamwent.cn/2017/02/21/android-using-javascript-in-webview/</loc>
+    
+    <lastmod>2017-03-07T02:31:20.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.iamwent.cn/2016/03/09/dagger2-step-to-step/</loc>
     
     <lastmod>2017-02-25T15:40:17.000Z</lastmod>
@@ -12,13 +26,6 @@
     <loc>http://blog.iamwent.cn/2016/08/27/android-status-bar-tinter/</loc>
     
     <lastmod>2017-02-25T15:38:48.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.iamwent.cn/2017/02/21/android-using-javascript-in-webview/</loc>
-    
-    <lastmod>2017-02-21T13:21:17.000Z</lastmod>
     
   </url>
   
